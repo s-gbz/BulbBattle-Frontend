@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row">
+    Welcome to BulbBattle!
+  </div>
+  <div class="row">
+      <label for="playerName">Your name:</label>
+      <br>
+      <input #playerNameInput id="playerName" class="form-control" placeholder="Enter your name" type="text">
+      <br>
+      <button class="btn btn-block" (click)="confirmNameCreatePlayerAndRequestId(playerNameInput.value)"></button>
+  </div>
+</div>
