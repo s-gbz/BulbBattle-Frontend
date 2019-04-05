@@ -1,0 +1,15 @@
+#B3272C - darkest red
+#FF6B70
+#FF5257 - middle red
+#15B33F
+#52FF7F - lightest green
+
+<div class="top-container">
+    <div class="single-col" style="background-color: #FF5257">1<br>a<1<br>a</div>
+    <div class="single-col" style="background-color: #FFD31F">2<br>a4<br>a<</div> 
+
+    <div class="single-col" style="background-color: #FF5257">1<br>a<1<br>a</div>
+    <div class="single-col" style="background-color: #FFD31F">2<br>a4<br>a<</div> 
+</div>
+
+ng serve --open --aot --host=0.0.0.0
