@@ -7,4 +7,8 @@ export class Player {
         this.name = name;
         this.points = 0;
     }
+
+    setUserId(id: number) {
+        this.id = id;
+    }
 }
