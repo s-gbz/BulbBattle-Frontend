@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../services/http.service';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-game-screen',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameScreenComponent implements OnInit {
 
-  constructor() { }
+  isActionPhase: boolean = true;
+  colorCombination: number[] = [];
+  enteredColorCombination: number[] = [];
+  timeLeftInSeconds: any;
+
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    timer(0, 1000).subscribe((seconds: number) => {
+      this.timeLeftInSeconds = seconds;
+    })
   }
+
+
 
 }

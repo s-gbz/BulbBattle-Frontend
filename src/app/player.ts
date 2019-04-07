@@ -1,3 +1,5 @@
+import { identifierModuleUrl } from '@angular/compiler';
+
 export class Player {
     private id: number;
     private name: string;
@@ -10,5 +12,9 @@ export class Player {
 
     setUserId(id: number) {
         this.id = id;
+    }
+
+    getUserId(): number {
+        return this.id;
     }
 }

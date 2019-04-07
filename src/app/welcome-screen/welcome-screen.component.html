@@ -3,10 +3,21 @@
     Welcome to BulbBattle!
   </div>
   <div class="row">
-      <label for="playerName">Your name:</label>
-      <br>
-      <input #playerNameInput id="playerName" class="form-control" placeholder="Enter your name" type="text">
-      <br>
+    <label for="playerName">Your name:</label>
+    <br>
+    <input #playerNameInput id="playerName" class="form-control" placeholder="Enter your name" type="text">
+    <br>
     <button class="btn btn-block" (click)="confirmNameCreatePlayerAndRequestId(playerNameInput.value)">Confirm</button>
+    <button class="btn btn-block" (click)="requestHighscore()">requestHighscore</button>
+  </div>
+
+  <div *ngIf="isAdmin">
+    <div class="row">
+      <label for="numberOfRounds">Number of rounds:</label>
+      <br>
+      <input #numberOfRoundsInput id="numberOfRounds" class="form-control" placeholder="Enter the number of rounds to be played" type="text">
+      <br>
+      <button class="btn btn-block" (click)="startGame(numberOfRoundsInput.value)">Start game</button>
+    </div>
   </div>
 </div>

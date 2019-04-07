@@ -10,25 +10,45 @@ import { Router } from '@angular/router';
 })
 export class WelcomeScreenComponent implements OnInit {
 
-  private player: Player;
-  private isAdmin: boolean;
+  player: Player;
+  isAdmin: boolean = false;
 
-  constructor( private router: Router) { }
+  constructor(private httpService: HttpService, private router: Router) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.httpService.subscribeClientToWebsocket().subscribe((roundUpdate: { isActionPhase: boolean, colorCombination: number[] }) => {
+
+    });
+  }
 
   confirmNameCreatePlayerAndRequestId(playerName: string) {
     this.player = new Player(playerName);
+    const playerNameJson = { "name": playerName }
 
-    this.httpService.sendUserNameAndGetUserId(playerName).subscribe(
+    this.httpService.sendUserNameAndGetUserId(playerNameJson).subscribe(
       (receivedId) => {
         this.player.setUserId(receivedId);
-        if (receivedId == 1) { 
-          this.isAdmin = true; }
+        console.log(this.player);
+        if (receivedId == 1) {
+          this.isAdmin = true;
+        }
         else {
           this.router.navigateByUrl("/game");
         }
       }
     );
+  }
+
+  startGame(numberOfRounds: number): void {
+    const numberOfRoundsJson = { "numberOfRounds": numberOfRounds }
+
+    this.httpService.setNumberOfRoundsAndStartGame(numberOfRoundsJson);
+    this.router.navigateByUrl("/game");
+  }
+
+  requestHighscore(): void {
+    this.httpService.requestHighscore().subscribe((userList) => {
+      console.log(userList);
+      });
   }
 }
