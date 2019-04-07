@@ -9,6 +9,12 @@
     <br>
     <button class="btn btn-block" (click)="confirmNameCreatePlayerAndRequestId(playerNameInput.value)">Confirm</button>
     <button class="btn btn-block" (click)="requestHighscore()">requestHighscore</button>
+    <button class="btn btn-block" (click)="sendMessage(playerNameInput.value)">sendMessage</button>
+    <p>{{websocketName}}</p>
+    <br>
+    <p>Log:</p>
+    <br>
+    <p>{{log}}</p>
   </div>
 
   <div *ngIf="isAdmin">

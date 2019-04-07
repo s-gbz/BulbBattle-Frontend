@@ -4,9 +4,12 @@ import { HttpService } from '../services/http.service';
 import { Router } from '@angular/router';
 
 // *to be refactored
-import { Observable, of  } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import { environment } from 'src/environments/environment';
+
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client'; 
 // *to be refactored
 
 @Component({
@@ -18,22 +21,43 @@ export class WelcomeScreenComponent implements OnInit {
 
   player: Player;
   isAdmin: boolean = false;
+  stompClient;
+  websocketName = "No name";
+  log = "Nothing to log";
 
   constructor(private httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
-/*     this.httpService.subscribeClientToWebsocket().subscribe((roundUpdate: { isActionPhase: boolean, colorCombination: number[] }) => {
-
-    }); */
+    /*     this.httpService.subscribeClientToWebsocket().subscribe((roundUpdate: { isActionPhase: boolean, colorCombination: number[] }) => {
+    
+        }); */
 
     // /update-color-combination
-    const subject = webSocket(environment.websocketBaseUrl);
+    /*    const subject = webSocket(environment.websocketBaseUrl);
+   
+       subject.subscribe(
+          msg => console.log('message received: ' + msg), // Called whenever there is a message from the server.
+          err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
+          () => console.log('complete') // Called when connection is closed (for whatever reason).
+        ); */
+    this.initializeWebSocketConnection()
+  }
 
-    subject.subscribe(
-       msg => console.log('message received: ' + msg), // Called whenever there is a message from the server.
-       err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
-       () => console.log('complete') // Called when connection is closed (for whatever reason).
-     );
+  initializeWebSocketConnection() {
+    let ws = new SockJS("http://localhost:8080/socket");
+    this.stompClient = Stomp.over(ws);
+    let that = this;
+    this.stompClient.connect({}, function (frame) {
+      that.stompClient.subscribe("/update-color-combination", (message) => {
+        console.log(message);
+        that.websocketName = message.body;
+        that.log = message;
+      });
+    });
+  }
+
+  sendMessage(name) {
+    this.stompClient.send("/update-color-combination", {}, name);
   }
 
   confirmNameCreatePlayerAndRequestId(playerName: string) {
@@ -64,6 +88,6 @@ export class WelcomeScreenComponent implements OnInit {
   requestHighscore(): void {
     this.httpService.requestHighscore().subscribe((userList) => {
       console.log(userList);
-      });
+    });
   }
 }
