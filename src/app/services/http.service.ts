@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of  } from 'rxjs';
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { catchError, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 
@@ -10,24 +11,38 @@ import { environment } from 'src/environments/environment';
 })
 export class HttpService {
 
-  serverBaseUrl = environment.serverBaseUrl;
   httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
   constructor(private http: HttpClient) { }
 
-  sendUserNameAndGetUserId(userName: string): Observable<number> {    
-    return this.http.post<number>(this.serverBaseUrl + "/get-user-id", userName, this.httpOptions);
+  sendUserNameAndGetUserId(playerNameJson): Observable<number> {    
+    return this.http.post<number>(environment.serverBaseUrl + "/user/register", playerNameJson, this.httpOptions)
+    .pipe(tap(), catchError(this.handleError<number>("sendUserNameAndGetUserId")));
   }
 
-  setNumberOfRoundsAndStartGame(numberOfRounds: number): void {
-    this.http.post(this.serverBaseUrl + "/set-number-of-rounds-and-start-game", numberOfRounds, this.httpOptions);
+  setNumberOfRoundsAndStartGame(numberOfRoundsJson): void {
+    this.http.post(environment.serverBaseUrl + "/game/start", numberOfRoundsJson, this.httpOptions)
+    .pipe(tap(), catchError(this.handleError<string>("setNumberOfRoundsAndStartGame")));
   }
 
-  subscribeClientToWebsocket(): WebSocketSubject<number[]> {
-    return webSocket(this.serverBaseUrl + "/register-client");
+/*   subscribeClientToWebsocket(): WebSocketSubject<{isActionPhase: boolean, colorCombination: number[]}> {
+    return webSocket(environment.websocketBaseUrl + "/socket");
+  } */
+
+  requestHighscore(): Observable<any> {    
+    return this.http.get(environment.serverBaseUrl + "/user/highscore", this.httpOptions)
+    .pipe(tap(), catchError(this.handleError<any>("requestHighscore")));
   }
 
-  requestHighscore(): Observable<{userName: string, score: number}[]> {    
-    return this.http.get<{userName: string, score: number}[]>(this.serverBaseUrl + "/request-highscore", this.httpOptions);
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      console.error(error); // log to console instead
+
+      console.log(`${operation} failed: ${error.message}`);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
   }
 }

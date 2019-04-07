@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  serverBaseUrl: 'http://localhost:8080'
+  serverBaseUrl: 'http://localhost:8080',
+  websocketBaseUrl: 'ws://localhost:8080/socket/websocket'
 };
 
 /*

@@ -1,19 +1,21 @@
-<!-- <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-6" style="background-color: #FF5257">1<br>a<1<br>a</div>
-    <div class="col-md-6" style="background-color: #FFD31F">2<br>a4<br>a<</div> 
-  </div> 
+<div *ngIf="isActionPhase === null">
+  <p>
+    Wait for admin to start the game.
+  </p>
+</div>
 
-  <div class="row">
-      <div class="col-md-6" style="background-color: #52FF7F">3<br>a2<br>a</div>
-      <div class="col-md-6" style="background-color: #383FFF">4<br>a3<br>a</div>
+<div *ngIf="isActionPhase !== null">
+  <div class="top-container" *ngIf="isActionPhase === false">
+    <p>
+      Remember the color combination.
+    </p>
   </div>
-</div> -->
 
-<div class="top-container">
+  <div class="top-container" *ngIf="isActionPhase === true">
+    <div><p>Time left: {{timeLeftInSeconds}}</p></div>
     <div class="single-col" style="background-color: #FF5257">1<br>a<1<br>a</div>
-    <div class="single-col" style="background-color: #FFD31F">2<br>a4<br>a<</div> 
-
-    <div class="single-col" style="background-color: #52FF7F">1<br>a<1<br>a</div>
-    <div class="single-col" style="background-color: #383FFF">2<br>a4<br>a<</div> 
+    <div class="single-col" style="background-color: #FFD31F">2<br>a4<br>a</div>
+    <div class="single-col" style="background-color: #52FF7F">3<br>a<1<br>a</div>
+    <div class="single-col" style="background-color: #383FFF">4<br>a4<br>a</div>
+  </div>
 </div>
